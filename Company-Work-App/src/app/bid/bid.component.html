@@ -1,0 +1,34 @@
+<div class="bid-card">
+    <div class="bid-header">
+        <span class="bid-code"> {{ bid().code }} </span>
+        <span class="bid-status"> {{ bid().status }} </span>
+    </div>
+    
+    <div class="bid-body">
+        <h3 class="bid-name"> {{ bid().name }} </h3>
+        <h3 class="bid-description"> {{ bid().description }} </h3>
+        <div class="bid-details">
+           <div class="bid-item">
+             <i class="fas fa-calendar"></i>
+             <span>Apertura: {{ bid().openingDate }} | date:'dd/MM/yyyy'</span>
+             <span>Cierre: {{ bid().closingDate }} | date:'dd/MM/yyyy'</span>
+           </div>
+
+           <div class="bid-item">
+             <i class="fas fa-calendar-check"></i>
+             <span>Cierre: {{ bid().closingDate }} | date:'dd/MM/yyyy'</span>
+           </div>
+
+           <div class="bid-item">
+             <i class="fas fa-money-bill-wave"></i>
+             <span>Presupuesto: {{ bid().budget }} | date:'dd/MM/yyyy'</span>
+           </div>
+        </div>
+    </div>
+    <div class="bid-footer">
+        <button class="btn-show">See Detail</button>
+        @if (!allowedToEdit) {
+            <button class="btn-edit">Edit</button>
+        }
+    </div>
+</div>
