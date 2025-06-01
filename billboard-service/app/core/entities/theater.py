@@ -3,7 +3,7 @@ from typing import Optional
 from pydantic import PositiveInt, Field
 from ..valueobjects.enums import TheaterType 
 
-class Theather(BaseModel):
+class Theater(BaseModel):
     """
     Represents a Theater entity within a Cinema.
     """
