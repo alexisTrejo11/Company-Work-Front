@@ -1,10 +1,13 @@
+from __future__ import annotations
 from sqlalchemy import String, Integer, Boolean, Date, DateTime
-from sqlalchemy.orm import mapped_column, DeclarativeBase
+from sqlalchemy.orm import mapped_column
 from sqlalchemy.sql import func
+from app.shared.base_model import Base
+from sqlalchemy.orm import mapped_column, relationship, Mapped
+from typing import List, TYPE_CHECKING
 
-
-class Base(DeclarativeBase):
-    pass
+if TYPE_CHECKING:
+    from app.showtime.infrastructure.persistence.models.showtime_model import ShowtimeModel
 
 class MovieModel(Base):
     __tablename__ = 'movies'
@@ -23,3 +26,7 @@ class MovieModel(Base):
     is_active = mapped_column(Boolean, default=True)
     created_at = mapped_column(DateTime, server_default=func.now())
     updated_at = mapped_column(DateTime, server_default=func.now(), onupdate=func.now())
+
+    showtimes: Mapped[List["ShowtimeModel"]] = relationship(
+        back_populates="movie"
+    )

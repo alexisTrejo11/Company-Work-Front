@@ -11,12 +11,9 @@ class SQLAlchemyMovieRepository(MovieRepository):
     def __init__(self,  session: AsyncSession):
         self.session = session
 
-    async def get_active_movies(self) -> List[Movie]:
-        a_year_ago = datetime.now() - timedelta(days=365)
-        
+    async def get_active_movies(self) -> List[Movie]:        
         stmt = select(MovieModel).where(
-            MovieModel.is_active == True,
-            MovieModel.release_date > a_year_ago
+            MovieModel.is_active == True
         )
         result = await self.session.execute(stmt)
         models = result.scalars().all()
