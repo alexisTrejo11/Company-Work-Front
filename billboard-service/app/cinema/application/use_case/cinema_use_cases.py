@@ -1,16 +1,16 @@
 from typing import List
 from ..repository.cinema_repository import CinemaRepository 
 from ...core.entities.cinema import Cinema
+from ...core.exceptions import CinemaNotFound
 
 class GetCinemaByIdUseCase:
     def __init__(self, repository: CinemaRepository):
         self.repository = repository
     
-    def execute(self, cinema_id: int) -> Cinema:
-        cinema = self.repository.get_by_id(cinema_id)
+    async def execute(self, cinema_id: int) -> Cinema:
+        cinema = await self.repository.get_by_id(cinema_id)
         if not cinema:
-            raise ValueError("Cinema Not Found")
-        
+            raise CinemaNotFound("Cinema", cinema_id)
         return cinema
 
 
@@ -30,6 +30,18 @@ class CreateCinemaUseCase:
         return self.repository.save(new_cinema)
 
 
+class UpdateCinemaUseCase:
+    def __init__(self, repository: CinemaRepository):
+        self.repository = repository
+    
+    async def execute(self, cinema_id: int, cinema_updated: Cinema) -> Cinema:
+        cinema = await self.repository.get_by_id(cinema_id)
+        if not cinema:
+            raise CinemaNotFound(f"Cinema", cinema_id)
+        
+        cinema_updated.id = cinema_id
+        return await self.repository.save(cinema_updated)
+
 class DeleteCinemaUseCase:
     def __init__(self, repository: CinemaRepository):
         self.repository = repository
@@ -37,6 +49,6 @@ class DeleteCinemaUseCase:
     async def execute(self, cinema_id: int) -> None:
         cinema = await self.repository.get_by_id(cinema_id)
         if not cinema:
-            raise ValueError("Cinema Not Found")
+            raise CinemaNotFound(f"Cinema", cinema_id)
         
         await self.repository.delete(cinema)

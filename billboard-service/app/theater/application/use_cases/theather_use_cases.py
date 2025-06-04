@@ -1,6 +1,8 @@
 from typing import Optional, Dict, List
 from ...core.entities.theater import Theater
 from ..repositories.theater_repository import TheaterRepository
+from app.cinema.application.repository.cinema_repository import CinemaRepository
+from app.shared.exceptions import NotFoundException
 
 class GetTheaterByIdUseCase:
     def __init__(self, repository: TheaterRepository):
@@ -30,27 +32,46 @@ class ListTheatersUseCase:
     
 
 class CreateTheaterUseCase:
-    def __init__(self, repository: TheaterRepository):
-        self.repository = repository
+    def __init__(self, theater_repository: TheaterRepository, cinema_repository: CinemaRepository):
+        self.theater_repository = theater_repository
+        self.cinema_repository = cinema_repository
 
     async def execute(self, theater: Theater) -> Theater:
+        self.validate_cinema(theater.cinema_id)
         theater.validate_buissness_rules()
-        return await self.repository.save(theater)
+
+        return await self.theater_repository.save(theater)
     
+    def validate_cinema(self, cinema_id: int):
+        cinema = self.cinema_repository.get_by_id(cinema_id)
+        if not cinema:
+            raise NotFoundException("Cinema", cinema_id)
+
 
 class UpdateTheaterUseCase:
-    def __init__(self, repository: TheaterRepository):
-        self.repository = repository
+    def __init__(self, theater_repository: TheaterRepository, cinema_repository: CinemaRepository):
+        self.theater_repository = theater_repository
+        self.cinema_repository = cinema_repository
 
     async def execute(self, theater_id: int, update_data: Theater) -> Theater:
-        theater = await self.repository.get_by_id(theater_id)
-        if not theater:
-            raise ValueError("Theater not found")
+        existing_theater = await self.get_theater(theater_id)
+        await self.validate_cinema(update_data.cinema_id)
         
-        theater.update(update_data) 
-        theater.validate_buissness_rules()
+        existing_theater.update(update_data) 
+        existing_theater.validate_buissness_rules()
 
-        return await self.repository.save(theater)
+        return await self.theater_repository.save(existing_theater)
+    
+    async def get_theater(self, theater_id: int):
+        theater = await self.theater_repository.get_by_id(theater_id)
+        if not theater:
+            raise NotFoundException(f"Theater", theater_id)
+        return theater
+        
+    async def validate_cinema(self, cinema_id: int):
+        cinema = await self.cinema_repository.get_by_id(cinema_id)
+        if not cinema:
+            raise NotFoundException(f"Cinema", cinema_id)        
 
 
 class DeleteTheaterUseCase:
@@ -60,6 +81,6 @@ class DeleteTheaterUseCase:
     async def execute(self, theater_id: int) -> None:
         theater = await self.repository.get_by_id(theater_id)
         if not theater:
-            raise ValueError("Theater not found")
+            raise NotFoundException("Theater", theater_id)
         
         await self.repository.delete(theater_id)

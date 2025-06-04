@@ -1,5 +1,5 @@
 from decimal import Decimal
-from shared.exceptions import DomainException
+from app.shared.exceptions import DomainException
 
 class InvalidShowtimePriceError(DomainException):
     """Exception raised when a showtime's price is outside the allowed range."""

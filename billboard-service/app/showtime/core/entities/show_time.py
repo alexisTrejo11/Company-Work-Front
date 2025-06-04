@@ -7,6 +7,8 @@ from ..exceptions.domain_exceptions import (
     InvalidShowtimeDurationError,
     ShowtimeSchedulingError
 )
+from typing import Dict
+from datetime import timedelta
 
 class Showtime(BaseModel):
     """
@@ -18,6 +20,38 @@ class Showtime(BaseModel):
     start_time: datetime
     end_time: Optional[datetime] = None
     price: Decimal = Field(..., max_digits=6, decimal_places=2)
+    _EXTRA_DURATIONS: Dict[str, int] = {
+        "initial_cleaning": 10,
+        "initial_commercials": 40,
+        "post_credits_scene": 10,
+        "post_cleaning": 30
+    }
+    
+    @classmethod
+    def get_buffered_extra_times(cls, include_post_credits_scene: bool = False) -> Dict[str, timedelta]:
+        """
+        Calculates the pre-show and post-show buffer durations.
+
+        Args:
+            include_post_credits_scene (bool): If True, adds time for post-credits scenes
+                                               to the post-show buffer.
+
+        Returns:
+            Dict[str, timedelta]: A dictionary containing 'pre_buffer' and 'post_buffer'
+                                  as timedelta objects.
+        """
+        pre_buffer_minutes = cls._EXTRA_DURATIONS["initial_cleaning"] + \
+                             cls._EXTRA_DURATIONS["initial_commercials"]
+
+        post_buffer_minutes = cls._EXTRA_DURATIONS["post_cleaning"]
+        if include_post_credits_scene:
+            post_buffer_minutes += cls._EXTRA_DURATIONS["post_credits_scene"]
+        
+        pre_buffer = timedelta(minutes=pre_buffer_minutes)
+        post_buffer = timedelta(minutes=post_buffer_minutes)
+        
+        return {"pre_buffer": pre_buffer, "post_buffer": post_buffer}
+
 
     def validate_business_logic(self):
         """
@@ -27,6 +61,11 @@ class Showtime(BaseModel):
         self._validate_price()
         self._validate_duration()
         self._validate_schedule_date()
+
+    def update(self, new_data: 'Showtime'):
+        self.start_time = new_data.start_time
+        self.end_time = new_data.end_time
+        self.price = new_data.price
 
     def _validate_price(self):
         """
@@ -38,11 +77,6 @@ class Showtime(BaseModel):
         if not (MIN_LIMIT_PRICE < self.price < MAX_LIMIT_PRICE): 
             raise InvalidShowtimePriceError(self.price, MIN_LIMIT_PRICE, MAX_LIMIT_PRICE)
         
-    def update(self, new_data: 'Showtime'):
-        self.start_time = new_data.start_time
-        self.end_time = new_data.end_time
-        self.price = new_data.price
-
     def _validate_schedule_date(self):
         """
         Validates that the showtime start_time is not in the past

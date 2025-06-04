@@ -4,7 +4,7 @@ from sqlalchemy import select, delete
 from ..models.showtime_model import ShowtimeModel
 from ...mappers.show_time_mappers import ShowtimeModelMapper
 from ....core.entities.show_time import Showtime
-from shared.repository.common_repository import CommonRepository
+from app.shared.repository.common_repository import CommonRepository
 
 class SQLAlchemyShowtimeRepository(CommonRepository[Showtime]):
     def __init__(self, session: AsyncSession):

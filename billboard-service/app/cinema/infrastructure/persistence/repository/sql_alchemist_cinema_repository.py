@@ -5,6 +5,7 @@ from ...mappers.cinema_mappers import CinemaModelMapper as CinemaMapper
 from ..model.cinema_model import CinemaModel
 from ....application.repository.cinema_repository import CinemaRepository
 from ....core.entities.cinema import Cinema
+from ....core.exceptions import CinemaNotFound
 
 class SQLAlchemyCinemaRepository(CinemaRepository):
     def __init__(self,  session: AsyncSession):
@@ -61,16 +62,24 @@ class SQLAlchemyCinemaRepository(CinemaRepository):
         await self.session.refresh(model)
         return model
     
-    async def _update(self, entity: Cinema):
+    async def _update(self, entity: Cinema) -> CinemaModel:
         model = await self.session.get(CinemaModel, entity.id)
+        
         if not model:
-            raise ValueError("Cinema not found")
+            raise CinemaNotFound(f"Cinema with ID {entity.id} not found for update.")
 
-        # Map Update 
-       
+        entity_data = CinemaMapper.from_domain(entity).__dict__
+        keys_to_exclude = {'id', 'created_at', '_sa_instance_state'}
+        
+        for key, value in entity_data.items():
+            if key not in keys_to_exclude:
+                setattr(model, key, value)
+        
         await self.session.commit()
-        await self.session.refresh(model)
-    
+        await self.session.refresh(model) 
+        
+        return model
+
     async def delete(self, entity) -> None:
         stmt = delete(CinemaModel).where(CinemaModel.id == entity.id)
         await self.session.execute(stmt)

@@ -20,8 +20,6 @@ async def get_theater(
     use_case: GetTheaterByIdUseCase = Depends(get_theater_by_id_use_case)
 ):
     theater = await use_case.execute(theater_id)
-    if not theater:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Theater not found")
     return theater
 
 @router.get("/", response_model=List[Theater])
@@ -34,7 +32,8 @@ async def list_theaters(
         "offset": (page - 1) * limit,
         "limit": limit
     }
-    return await use_case.execute(page_params=page_params)
+    theaters = await use_case.execute(page_params=page_params)
+    return theaters
 
 @router.get("/cinema/{cinema_id}", response_model=List[Theater])
 async def get_theaters_by_cinema(
@@ -43,10 +42,7 @@ async def get_theaters_by_cinema(
 ):
     theaters = await use_case.execute(cinema_id)
     if not theaters:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="No theaters found for this cinema"
-        )
+        return []
     return theaters
 
 @router.post("/", response_model=Theater, status_code=status.HTTP_201_CREATED)
@@ -54,10 +50,8 @@ async def create_theater(
     new_theater: Theater,
     use_case: CreateTheaterUseCase = Depends(create_theater_use_case)
 ):
-    try:
-        return await use_case.execute(new_theater)
-    except ValueError as e:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+        theater = await use_case.execute(new_theater)
+        return theater
 
 @router.put("/{theater_id}", response_model=Theater)
 async def update_theater(
@@ -65,18 +59,13 @@ async def update_theater(
     update_theater: Theater,
     use_case: UpdateTheaterUseCase = Depends(update_theater_use_case)
 ):
-    try:
-        return await use_case.execute(theater_id, update_theater)
-    except ValueError as e:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
+    theater = await use_case.execute(theater_id, update_theater)
+    return theater
 
 @router.delete("/{theater_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_theater(
     theater_id: int,
     use_case: DeleteTheaterUseCase = Depends(delete_theater_use_case)
 ):
-    try:
-        await use_case.execute(theater_id)
-    except ValueError as e:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
+    await use_case.execute(theater_id)
 
