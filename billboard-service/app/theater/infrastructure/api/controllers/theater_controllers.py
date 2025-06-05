@@ -6,7 +6,7 @@ from ....application.use_cases.theather_use_cases import (
     CreateTheaterUseCase, UpdateTheaterUseCase,
     DeleteTheaterUseCase,GetTheatersByCinemaUseCase
 )
-from ...injection.depdencies import (
+from ...injection.theater_depdencies import (
     get_theater_by_id_use_case, list_theaters_use_case,
     create_theater_use_case, update_theater_use_case,
     delete_theater_use_case, get_theaters_by_cinema_use_case

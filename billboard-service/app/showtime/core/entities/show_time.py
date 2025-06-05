@@ -1,15 +1,14 @@
-from datetime import datetime, timedelta
 from pydantic import Field, BaseModel
+from typing import Dict, List, Optional
+from datetime import datetime, timedelta
 from decimal import Decimal
-from typing import Optional
+from .value_objects import ShowtimeLanguage, ShowtimeType, Seats
 from ..exceptions.domain_exceptions import (
-    InvalidShowtimePriceError,
-    InvalidShowtimeDurationError,
-    ShowtimeSchedulingError
+    InvalidShowtimePriceError, InvalidShowtimeDurationError,
+    ShowtimeSchedulingError, ShowtimeSeatsError
 )
-from typing import Dict
-from datetime import timedelta
 
+#TODO: Add New Fields to Model, Handle Seats, Add Repo missing func
 class Showtime(BaseModel):
     """
     Represents a Showtime entity for a Movie in a Theater.
@@ -17,9 +16,15 @@ class Showtime(BaseModel):
     id: Optional[int] = None
     movie_id: int
     theater_id: int
+    price: Decimal = Field(..., max_digits=6, decimal_places=2)
     start_time: datetime
     end_time: Optional[datetime] = None
-    price: Decimal = Field(..., max_digits=6, decimal_places=2)
+    type: ShowtimeType
+    language: ShowtimeLanguage
+    total_seats: int
+    avaialble_seats: int
+    seats: List[Seats] = []
+
     _EXTRA_DURATIONS: Dict[str, int] = {
         "initial_cleaning": 10,
         "initial_commercials": 40,
@@ -52,7 +57,6 @@ class Showtime(BaseModel):
         
         return {"pre_buffer": pre_buffer, "post_buffer": post_buffer}
 
-
     def validate_business_logic(self):
         """
         Validates the business rules for a Showtime entity.
@@ -66,6 +70,32 @@ class Showtime(BaseModel):
         self.start_time = new_data.start_time
         self.end_time = new_data.end_time
         self.price = new_data.price
+
+    def take_seats(self, seats_number: int):
+        self._validate_seat_quantity(seats_number)
+        self._validate_avaliable_seats(seats_number)
+
+        self.avaialble_seats -= seats_number
+
+    def _validate_seat_quantity(self, seats_number: int):
+        """
+        Validates seats allowed range quantity  
+        """
+        MIN_SEAT_ALLOWED = 1
+        MAX_SEAT_ALLOWED = 15
+        
+        if not MIN_SEAT_ALLOWED <= seats_number <= MAX_SEAT_ALLOWED:
+            raise ShowtimeSeatsError(
+                "Invalid seat quantity. " +
+                f"Seat quantity must be between {MIN_SEAT_ALLOWED} to {MAX_SEAT_ALLOWED}"
+            )
+
+    def _validate_avaliable_seats(self, seats_number: int):
+        """
+        Validates enough quantity of a avaliable seats
+        """
+        if seats_number > self.avaialble_seats:
+            raise ShowtimeSeatsError("No Seats Avaliable for requested operation")
 
     def _validate_price(self):
         """
@@ -104,7 +134,6 @@ class Showtime(BaseModel):
         if not (MIN_SHOWTIME_DURATION_MINS <= duration_in_minutes <= MAX_SHOWTIME_DURATION_MINS):
             raise InvalidShowtimeDurationError(duration_in_minutes, MIN_SHOWTIME_DURATION_MINS, MAX_SHOWTIME_DURATION_MINS)
         
-
     def _validate_not_schedule_in_past(self):
         now_utc = datetime.now(datetime.timezone.utc)
         if self.start_time < now_utc:

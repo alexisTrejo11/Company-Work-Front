@@ -11,9 +11,9 @@ from ...injection.depdencies import (
     get_incoming_showtime_by_cinema_use_case, get_incoming_showtime_by_movie_use_case,
 )
 
-router = APIRouter(prefix="/api/v1/showtimes", tags=["showtimes"])
+router = APIRouter(prefix="/api/v1", tags=["showtimes"])
 
-@router.get("/{showtime_id}", response_model=Showtime)
+@router.get("/showtimes/{showtime_id}", response_model=Showtime)
 async def get_showtime(
     showtime_id: int,
     use_case: GetShowtimeByIdUseCase = Depends(get_showtime_by_id_use_case)
@@ -21,7 +21,7 @@ async def get_showtime(
     showtime = await use_case.execute(showtime_id)
     return showtime
 
-@router.get("/", response_model=List[Showtime])
+@router.get("/showtimes/", response_model=List[Showtime])
 async def get_showtimes(
     movie_id: Optional[int] = None,
     theater_id: Optional[int] = None,
@@ -49,7 +49,8 @@ async def get_showtimes(
     return showtimes
 
 
-@router.get("/incoming/movie/{movie_id}", response_model=Showtime)
+# Movie Showtime
+@router.get("/movie-showtimes/incoming/movie/{movie_id}", response_model=Showtime)
 async def get_incoming_showtimes_by_movie(
     movie_id: int,
     use_case: GetIncomingShowtimesByMovieUseCase = Depends(get_incoming_showtime_by_movie_use_case)
@@ -60,7 +61,7 @@ async def get_incoming_showtimes_by_movie(
     
     return showtimes
 
-@router.get("/incoming/cinema/{cinema_id}", response_model=Showtime)
+@router.get("/movie-showtimes/cinema/{cinema_id}", response_model=Showtime)
 async def get_incoming_showtimes_by_cinema(
     cinema_id: int,
     use_case: GetIncomingShowtimesByCinemaUseCase = Depends(get_incoming_showtime_by_cinema_use_case)

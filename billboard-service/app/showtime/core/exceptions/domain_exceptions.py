@@ -26,3 +26,8 @@ class ShowtimeSchedulingError(DomainException):
     """Exception raised for general scheduling conflicts or illogical start/end times."""
     def __init__(self, message: str = "Showtime start time cannot be after or equal to end time."):
         super().__init__(message)
+
+class ShowtimeSeatsError(DomainException):
+    """Exception raised for general seats conflicts."""
+    def __init__(self, message: str = "Showtime don't have available seats to requested operation"):
+        super().__init__(message)

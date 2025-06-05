@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List
+from typing import List, Dict
 from abc import ABC, abstractmethod
 from ...core.entities.movie import Movie
 from app.shared.repository.common_repository import CommonRepository
@@ -13,4 +13,5 @@ class MovieRepository(CommonRepository[Movie], ABC):
     # @abstractmethod
     # async def find_movies_by_genre(self, genre: str) -> List[Movie]:
     #     pass
-    pass
+    async def get_in_exhibition(self) -> List[Movie]:
+        pass

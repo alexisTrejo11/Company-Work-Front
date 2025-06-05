@@ -1,5 +1,5 @@
 from __future__ import annotations
-from sqlalchemy import String, Integer, Boolean, DateTime, ForeignKey, Enum
+from sqlalchemy import String, Integer, Boolean, DateTime, ForeignKey
 from sqlalchemy.orm import mapped_column, relationship, Mapped
 from sqlalchemy.sql import func
 from datetime import datetime
@@ -11,6 +11,7 @@ from app.shared.base_model import Base
 if TYPE_CHECKING:
     from app.cinema.infrastructure.persistence.model.cinema_model import CinemaModel
     from app.showtime.infrastructure.persistence.models.showtime_model import ShowtimeModel
+    from .theater_seat_model import TheaterSeatModel
 
 class TheaterTypeModel(enum.Enum):
     TWO_D = '2D'
@@ -42,6 +43,13 @@ class TheaterModel(Base):
 
     cinema: Mapped["CinemaModel"] = relationship(back_populates="theaters")
     showtimes: Mapped[List["ShowtimeModel"]] = relationship(back_populates="theater")
+
+    theater_seats = relationship(
+        'TheaterSeatModel',
+        back_populates="theater",
+        lazy='select',
+        cascade="all, delete-orphan"
+    )
 
     def __repr__(self) -> str:
         return f"<Theater(id={self.id}, name='{self.name}', type='{self.theater_type.value}')>"

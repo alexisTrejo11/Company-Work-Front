@@ -12,10 +12,15 @@ CREATE TABLE theaters (
     theater_type theater_type_enum NOT NULL,
     is_active BOOLEAN NOT NULL DEFAULT TRUE,
     maintenance_mode BOOLEAN NOT NULL DEFAULT FALSE,
+    
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_cinema FOREIGN KEY (cinema_id) REFERENCES cinemas (id) ON DELETE CASCADE
+    
+    CONSTRAINT fk_cinema 
+        FOREIGN KEY (cinema_id) 
+        REFERENCES cinemas (id) ON DELETE CASCADE
 );
+
 
 CREATE INDEX idx_theaters_cinema_id ON theaters (cinema_id);
 CREATE INDEX idx_theaters_type ON theaters (theater_type);
@@ -36,18 +41,18 @@ EXECUTE FUNCTION update_timestamp();
 
 INSERT INTO theaters (cinema_id, name, capacity, theater_type, is_active, maintenance_mode)
 VALUES
-(1, 'Sala 1 - Principal', 250, '2D', TRUE, FALSE),
-(1, 'Sala 2 - 3D', 180, '3D', TRUE, FALSE),
-(2, 'Sala 3 - IMAX', 300, 'IMAX', TRUE, FALSE),
-(2, 'Sala 4 - VIP', 50, 'V', TRUE, FALSE),
-(3, 'Sala 5 - 4DX', 100, '4DX', TRUE, FALSE),
-(3, 'Sala 6 - Estándar', 200, '2D', TRUE, FALSE),
-(4, 'Sala 7 - Premium 3D', 150, '3D', TRUE, FALSE),
-(4, 'Sala 8 - Pequeña', 80, '2D', TRUE, TRUE),
-(5, 'Sala 9 - Gran Formato', 280, 'IMAX', FALSE, FALSE),
-(5, 'Sala 10 - Experiencia', 120, '4DX', TRUE, FALSE),
-(6, 'Sala 11 - Clásica', 220, '2D', TRUE, FALSE),
-(7, 'Sala 12 - Confort', 160, '3D', TRUE, FALSE),
-(8, 'Sala 13 - Exclusiva', 70, 'V', TRUE, FALSE),
-(9, 'Sala 14 - Futurista', 110, '4DX', TRUE, FALSE),
-(10, 'Sala 15 - Familiar', 190, '2D', TRUE, FALSE);
+(1, 'Room 1 - Main', 200, '2D', TRUE, FALSE),
+(1, 'Room 2 - 3D', 160, '3D', TRUE, FALSE),
+(2, 'Room 3 - IMAX', 300, 'IMAX', TRUE, FALSE),
+(2, 'Room 4 - VIP', 50, 'V', TRUE, FALSE),
+(3, 'Room 5 - 4DX', 120, '4DX', TRUE, FALSE), 
+(3, 'Room 6 - Standard', 160, '2D', FALSE, TRUE), -- No Seats
+(4, 'Room 7 - Premium 3D', 150, '3D', FALSE, TRUE), -- No Seats
+(4, 'Room 8 - Small', 80, '2D', FALSE, TRUE),
+(5, 'Room 9 - Great Format', 280, 'IMAX', FALSE, TRUE), -- No Seats
+(5, 'Room 10 - Experience', 120, '4DX', FALSE, TRUE), -- No Seats
+(6, 'Room 11 - Classic', 220, '2D', FALSE, TRUE), -- No Seats
+(7, 'Room 12 - Comfort', 160, '3D', FALSE, TRUE), -- No Seats
+(8, 'Room 13 - Exlusive', 70, 'V', FALSE, TRUE), -- No Seats
+(9, 'Room 14 - Futurist', 110, '4DX', FALSE, TRUE), -- No Seats
+(10, 'Room 15 - Familiar', 190, '2D', FALSE, TRUE); -- No Seats

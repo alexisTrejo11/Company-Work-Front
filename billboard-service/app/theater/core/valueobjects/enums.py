@@ -7,3 +7,13 @@ class TheaterType(str, Enum):
     FOUR_DX = '4DX'
     VIP = 'V'
 
+class SeatType(str, Enum):
+    """
+    Represents the type of a cinema seat.
+    Mirrors the 'seat_type_enum' in PostgreSQL.
+    """
+    STANDARD = "STANDARD"
+    VIP = "VIP"
+    ACCESSIBLE = "ACCESSIBLE" # For disabled access
+    PREMIUM = "PREMIUM"
+    LOVESEAT = "LOVESEAT"

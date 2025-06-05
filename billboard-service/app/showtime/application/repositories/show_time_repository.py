@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Dict
 from abc import ABC, abstractmethod
 from app.shared.repository.common_repository import CommonRepository
 from ...core.entities.show_time import Showtime
@@ -6,11 +6,18 @@ from datetime import datetime
 
 class ShowTimeRepository(CommonRepository[Showtime]):
     @abstractmethod
-    def get_incoming_by_cinema(cinema_id:int) -> List[Showtime]:
+    def get_incoming_by_cinema(self, cinema_id:int) -> List[Showtime]:
         pass
 
     @abstractmethod
-    def get_incoming_by_movie(movie_id:int) -> List[Showtime]:
+    def get_incoming_by_movie(self, movie_id:int) -> List[Showtime]:
+        pass
+
+    @abstractmethod
+    def get_incoming_movie_showtimes(self, movie_id: int = None, cinema_id: int = None) -> Dict[int, Showtime]:
+        """
+        DICT --> {key: movie_id: value: [...showtime]}
+        """
         pass
 
     @abstractmethod

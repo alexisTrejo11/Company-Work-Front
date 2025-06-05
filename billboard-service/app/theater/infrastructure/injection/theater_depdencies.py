@@ -1,7 +1,7 @@
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.config.postgres_config import get_db
-from ...infrastructure.persistence.repositories.sql_alchemist_theater_repository import (
+from ...infrastructure.persistence.repositories.sqlalchemist_theater_repository import (
     SQLAlchemyTheaterRepository
 )
 from app.cinema.infrastructure.persistence.repository.sql_alchemist_cinema_repository import SQLAlchemyCinemaRepository

@@ -1,8 +1,9 @@
-from pydantic import BaseModel, Field, field_validator
-from typing import Optional, ClassVar
+from pydantic import BaseModel, Field
+from typing import Optional, ClassVar, List
 from pydantic import PositiveInt
 from ..exceptions.domain_exceptions import *
 from ..valueobjects.enums import TheaterType
+from .seat import TheaterSeatEntity as Seat
 
 class Theater(BaseModel):
     """
