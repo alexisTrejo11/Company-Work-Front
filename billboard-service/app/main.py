@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.models import *
+from app.model_initialization import *
 from app.movies.infrastructure.api.controllers import movie_controllers
 from app.cinema.infrastructure.api.controllers import cinema_controllers
 from app.theater.infrastructure.api.controllers import theater_controllers, theather_seat_controllers

@@ -1,8 +1,11 @@
 from typing import List, Optional
 from app.shared.exceptions import NotFoundException
 from ...core.entities.seat import TheaterSeatEntity
+from ...application.dtos.seat_dtos import TheaterSeatCreate, TheaterSeatUpdate
 from ...application.repositories.theater_seat_repository import TheaterSeatRepository
 from ...application.repositories.theater_repository import TheaterRepository
+from ...application.mappers.TheaterSeatMappers import TheaterSeatMapper as SeatMappers
+from ...application.service.seat_validation_service import SeatValidationService
 
 class GetTheaterSeatByIdUseCase:
     """
@@ -26,6 +29,7 @@ class GetTheaterSeatByIdUseCase:
             raise NotFoundException("Seat", seat_id)
 
         return seat
+
 
 class GetSeatsByTheaterUseCase:
     """
@@ -51,35 +55,38 @@ class GetSeatsByTheaterUseCase:
 
         return await self.seat_repository.get_by_theater(theater_id)
 
-class SaveTheaterSeatUseCase:
-    """
-    Use case to save (create or update) a theater seat.
-    """
-    def __init__(self, seat_repository: TheaterSeatRepository, theater_repository: TheaterRepository):
+
+class CreateTheaterSeatUseCase:
+    def __init__(self, seat_repository: TheaterSeatRepository, validation_service: SeatValidationService):
         self.seat_repository = seat_repository
-        self.theater_repository = theater_repository
+        self.validation_service = validation_service
 
-    async def execute(self, seat: TheaterSeatEntity) -> TheaterSeatEntity:
-        """
-        Executes the use case to save a theater seat.
-        This handles both creation (if seat.id is None) and updating.
+    async def execute(self, seat_data: TheaterSeatCreate) -> TheaterSeatEntity:
+        await self.validation_service.validate_seat_create(seat_data)
+        new_seat = SeatMappers.from_create_dto(seat_data)
+        return await self.seat_repository.save(new_seat)
 
-        Args:
-            seat: The TheaterSeatEntity object to be saved.
 
-        Returns:
-            The saved TheaterSeatEntity (with potentially new ID/timestamps if created).
+class UpdateTheaterSeatUseCase:
+    def __init__(self, seat_repository: TheaterSeatRepository,  validation_service: SeatValidationService):
+        self.seat_repository = seat_repository
+        self.validation_service = validation_service
 
-        Raises:
-            RuntimeError: If the save operation fails at the repository level.
-        """
-        theater_id = seat.theater_id
+    async def execute(self, seat_id: int, update_data: TheaterSeatUpdate) -> TheaterSeatEntity:
+        existing_seat = await self._get_seat(seat_id)
+        self.validation_service.validate_seat_update(update_data)
         
-        theater = await self.theater_repository.get_by_id(theater_id)
-        if not theater:
-            raise NotFoundException("Theater", theater_id)
+        updated_seat = SeatMappers.from_update_dto(update_data, existing_seat)
+        existing_seat.id = seat_id
+    
+        return await self.seat_repository.save(updated_seat)
 
-        return await self.seat_repository.save(seat)
+    async def _get_seat(self, seat_id: int):
+        theater = await self.seat_repository.get_by_id(seat_id)
+        if not theater:
+            raise NotFoundException("Seat", seat_id)
+
+        return theater
 
 class DeleteTheaterSeatUseCase:
     """
@@ -95,8 +102,8 @@ class DeleteTheaterSeatUseCase:
         Args:
             seat_id: The unique identifier of the theater seat to delete.
         """
-        theater = await self.repository.get_by_id(seat_id)
-        if not theater:
+        seat = await self.repository.get_by_id(seat_id)
+        if not seat:
             raise NotFoundException("Seat", seat_id)
         
         await self.repository.delete(seat_id)

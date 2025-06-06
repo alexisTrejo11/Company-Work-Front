@@ -21,6 +21,13 @@ class TheaterSeatRepository(ABC):
         pass
 
     @abstractmethod
+    async def exist_by_theater_and_seat_values(self, theater_id: int, seat_row: str, seat_number: int) -> bool:        
+        """
+        Checks if a seat with the given theater_id, seat_row, and seat_number exists.
+        """
+        pass
+
+    @abstractmethod
     async def get_by_theater(self, theater_id: int) -> List[TheaterSeatEntity]:
         """
         Retrieves all TheaterSeatEntities belonging to a specific theater.

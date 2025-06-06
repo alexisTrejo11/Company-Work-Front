@@ -3,10 +3,7 @@ from typing import Dict, List, Optional
 from datetime import datetime, timedelta
 from decimal import Decimal
 from .value_objects import ShowtimeLanguage, ShowtimeType, Seats
-from ..exceptions.domain_exceptions import (
-    InvalidShowtimePriceError, InvalidShowtimeDurationError,
-    ShowtimeSchedulingError, ShowtimeSeatsError
-)
+from ..exceptions.domain_exceptions import *
 
 #TODO: Add New Fields to Model, Handle Seats, Add Repo missing func
 class Showtime(BaseModel):

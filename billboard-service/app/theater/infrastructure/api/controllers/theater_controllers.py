@@ -1,16 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from typing import List
+from ....application.use_cases.theather_use_cases import GetTheaterByIdUseCase, ListTheatersUseCase, CreateTheaterUseCase, UpdateTheaterUseCase, DeleteTheaterUseCase,GetTheatersByCinemaUseCase
+from ...injection.theater_depdencies import get_theater_by_id_use_case, list_theaters_use_case, create_theater_use_case, update_theater_use_case, delete_theater_use_case, get_theaters_by_cinema_use_case
 from ....core.entities.theater import Theater
-from ....application.use_cases.theather_use_cases import (
-    GetTheaterByIdUseCase, ListTheatersUseCase,
-    CreateTheaterUseCase, UpdateTheaterUseCase,
-    DeleteTheaterUseCase,GetTheatersByCinemaUseCase
-)
-from ...injection.theater_depdencies import (
-    get_theater_by_id_use_case, list_theaters_use_case,
-    create_theater_use_case, update_theater_use_case,
-    delete_theater_use_case, get_theaters_by_cinema_use_case
-)
 
 router = APIRouter(prefix="/api/v1/theaters", tags=["theaters"])
 
