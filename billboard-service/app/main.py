@@ -3,7 +3,7 @@ from app.model_initialization import *
 from app.movies.infrastructure.api.controllers import movie_controllers
 from app.cinema.infrastructure.api.controllers import cinema_controllers
 from app.theater.infrastructure.api.controllers import theater_controllers, theather_seat_controllers
-from app.showtime.infrastructure.api.controllers import showtime_controller, showtime_query_controller
+from app.showtime.infrastructure.api.controllers import showtime_controller, showtime_movie_controller
 from app.config import exception_handlers
 
 app = FastAPI(
@@ -23,4 +23,4 @@ app.include_router(theater_controllers.router)
 app.include_router(theather_seat_controllers.router)
 
 app.include_router(showtime_controller.router)
-app.include_router(showtime_query_controller.router)
+app.include_router(showtime_movie_controller.router)

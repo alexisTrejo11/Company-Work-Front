@@ -5,6 +5,8 @@ from datetime import datetime, date, timezone
 import enum
 from app.shared.base_model import Base
 from typing import List, TYPE_CHECKING, Optional
+from ....core.entities.valueobjects import LocationRegionEnum
+
 
 if TYPE_CHECKING:
     from app.theater.infrastructure.persistence.models.theater_model import TheaterModel
@@ -28,6 +30,8 @@ class CinemaFeaturesEnum(enum.Enum):
     DOBLY_ATMOS = "DOBLY_ATMOS"
 
 
+
+
 class CinemaModel(Base):
     __tablename__ = 'cinemas'
 
@@ -49,6 +53,7 @@ class CinemaModel(Base):
     # Enums
     type: Mapped[CinemaTypeEnum] = mapped_column(SQLEnum(CinemaTypeEnum, name='cinema_type_enum', create_type=False), nullable=False)
     status: Mapped[CinemaStatusEnum] = mapped_column(SQLEnum(CinemaStatusEnum, name='cinema_status_enum', create_type=False), nullable=False)
+    region: Mapped[LocationRegionEnum] = mapped_column(SQLEnum(LocationRegionEnum, name='location_region_enum', create_type=False), nullable=False)
 
     # Amenities
     has_parking: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)

@@ -4,7 +4,7 @@ from app.cinema.core.entities.cinema import (
     Cinema, CinemaStatus, CinemaType, CinemaFeatures, CinemaAmenities, ContactInfo, Location, SocialMedia
 )
 from app.cinema.infrastructure.persistence.model.cinema_model import ( 
-    CinemaModel, CinemaStatusEnum, CinemaTypeEnum
+    CinemaModel, CinemaStatusEnum, CinemaTypeEnum, LocationRegionEnum
 )
 
 class CinemaModelMapper:
@@ -30,6 +30,7 @@ class CinemaModelMapper:
 
             type=CinemaTypeEnum[entity.type], 
             status=CinemaStatusEnum[entity.status], 
+            region=LocationRegionEnum[entity.region],
 
             has_parking=entity.amenities.parking,
             has_food_court=entity.amenities.food_court,
@@ -76,6 +77,7 @@ class CinemaModelMapper:
 
             type=CinemaType[model.type.value],
             status=CinemaStatus[model.status.value],
+            region=LocationRegionEnum[model.region.value],
 
             amenities=CinemaAmenities(
                 parking=model.has_parking,

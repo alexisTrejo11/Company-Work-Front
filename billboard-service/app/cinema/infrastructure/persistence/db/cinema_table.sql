@@ -1,9 +1,9 @@
 CREATE TYPE cinema_status_enum AS ENUM ('OPEN', 'CLOSED', 'MAINTENANCE');
 CREATE TYPE cinema_type_enum AS ENUM ('VIP', 'TRADITIONAL');
+CREATE TYPE location_region_enum AS ENUM ('CDMX_SOUTH', 'CDMX_NORTH', 'CDMX_CENTER', 'CDMX_EAST', 'CDMX_WEST');
 
 CREATE TABLE cinemas (
     id SERIAL PRIMARY KEY,
-    
     image TEXT NOT NULL DEFAULT '',
     name VARCHAR(255) NOT NULL UNIQUE,
     tax_number VARCHAR(255) NOT NULL UNIQUE,
@@ -15,6 +15,7 @@ CREATE TABLE cinemas (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 
+    region location_region_enum NOT NULL,
     type cinema_type_enum NOT NULL, 
     status cinema_status_enum NOT NULL, 
 
@@ -75,6 +76,7 @@ INSERT INTO cinemas (
     last_renovation,
     type,
     status,
+    region,
     has_parking,
     has_food_court,
     has_coffee_station,
@@ -100,6 +102,7 @@ INSERT INTO cinemas (
     '2023-01-15', -- last renovation date
     'VIP',        -- CinemaType
     'OPEN',       -- CinemaStatus
+    'CDMX_CENTER', -- Location Region,
     TRUE,         -- has_parking
     TRUE,         -- has_food_court
     TRUE,         -- has_coffee_station
@@ -125,6 +128,7 @@ INSERT INTO cinemas (
     '2022-05-20',
     'TRADITIONAL',
     'OPEN',
+    'CDMX_CENTER', -- Location Region,
     TRUE,
     TRUE,
     FALSE,
@@ -150,6 +154,7 @@ INSERT INTO cinemas (
     '2024-02-10',
     'TRADITIONAL',
     'OPEN',
+    'CDMX_SOUTH', -- Location Region,
     TRUE,
     TRUE,
     TRUE,
@@ -175,6 +180,7 @@ INSERT INTO cinemas (
     '2021-11-01',
     'VIP',
     'OPEN',
+    'CDMX_CENTER',
     FALSE, -- No parking
     TRUE,
     TRUE,
@@ -200,6 +206,7 @@ INSERT INTO cinemas (
     '2020-09-01',
     'TRADITIONAL',
     'OPEN',
+    'CDMX_SOUTH',
     TRUE,
     TRUE,
     FALSE,
@@ -225,6 +232,7 @@ INSERT INTO cinemas (
     '2023-08-01',
     'TRADITIONAL',
     'OPEN',
+    'CDMX_WEST',
     TRUE,
     TRUE,
     TRUE,
@@ -250,6 +258,7 @@ INSERT INTO cinemas (
     '2024-01-25',
     'VIP',
     'OPEN',
+    'CDMX_WEST',
     TRUE,
     TRUE,
     TRUE,
@@ -275,6 +284,7 @@ INSERT INTO cinemas (
     '2022-03-01',
     'TRADITIONAL',
     'OPEN',
+    'CDMX_SOUTH',
     TRUE,
     TRUE,
     FALSE,
@@ -300,6 +310,7 @@ INSERT INTO cinemas (
     '2023-07-01',
     'TRADITIONAL',
     'OPEN',
+    'CDMX_WEST',
     TRUE,
     TRUE,
     TRUE,
@@ -325,6 +336,7 @@ INSERT INTO cinemas (
     '2021-02-18',
     'TRADITIONAL',
     'OPEN',
+    'CDMX_SOUTH',
     TRUE,
     TRUE,
     FALSE,

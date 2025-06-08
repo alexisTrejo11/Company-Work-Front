@@ -8,9 +8,19 @@ class ContactInfo(BaseModel):
     email_contact: EmailStr
     location: dict 
 
+
 class Location(BaseModel):
     lat: float
     lng: float
+
+
+class LocationRegionEnum(Enum):
+    CDMX_SOUTH = 'CDMX_SOUTH'
+    CDMX_NORTH = "CDMX_NORTH"
+    CDMX_CENTER = "CDMX_CENTER"
+    CDMX_EAST = "CDMX_EAST"
+    CDMX_WEST = "CDMX_WEST"
+
 
 class SocialMedia(BaseModel):
     facebook: Optional[str]
@@ -18,10 +28,12 @@ class SocialMedia(BaseModel):
     x: Optional[str]
     tik_tok: Optional[str]
 
+
 class CinemaStatus(Enum):
     OPEN = "OPEN"
     CLOSED = "CLOSED"
     MAINTENANCE = "MAINTENANCE"
+
 
 class CinemaFeatures(Enum):
     TWO_D = "2D"
@@ -36,8 +48,11 @@ class CinemaType(Enum):
     VIP = "VIP"
     TRADITIONAL = "TRADITIONAL"
 
+
 class CinemaAmenities(BaseModel):
     parking: bool = False
     food_court: bool = False
     coffee_station: bool = False
     disabled_access: bool = False
+
+

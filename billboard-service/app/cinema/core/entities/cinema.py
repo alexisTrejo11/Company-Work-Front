@@ -4,7 +4,7 @@ from typing import Optional, List
 from .valueobjects import (
     ContactInfo, Location, CinemaFeatures, 
     CinemaAmenities, CinemaType, CinemaStatus,
-    SocialMedia
+    SocialMedia, LocationRegionEnum as LocationRegion
 )
 
 class Cinema(BaseModel):
@@ -20,6 +20,7 @@ class Cinema(BaseModel):
     type: CinemaType = Field(..., description="Type of cinema (e.g., VIP, Traditional).")
     status: CinemaStatus = Field(..., description="Current operational status of the cinema.")
     amenities: CinemaAmenities = Field(..., description="Details about amenities available at the cinema.")
+    region: LocationRegion = Field(..., description="Details about region location of a cinema")
 
     contact_info: ContactInfo = Field(..., description="Contact information for the cinema.")
     location: Location = Field(..., description="Geographical location coordinates of the cinema.")

@@ -5,7 +5,7 @@ from app.config.postgres_config import get_db
 
 # Module
 from ...application.use_cases.showtime_command_use_cases import ScheduleShowtimeUseCase, UpdateShowtimeUseCase, DeleteShowtimeUseCase
-from ...application.use_cases.showtime_query_use_cases import  GetShowtimesUseCase, GetShowtimeByIdUseCase, GetIncomingShowtimesByCinemaUseCase
+from ...application.use_cases.showtime_query_use_cases import  GetShowtimesUseCase, GetShowtimeByIdUseCase
 from ...application.service.showtime_validator_service import ShowtimeValidationService
 from ..persistence.repositories.sqlalch_show_repository import SQLAlchemyShowtimeRepository
 from ...application.service.showtime_seat_service import ShowTimeSeatService
@@ -47,13 +47,3 @@ async def get_showtimes_use_case(db: AsyncSession = Depends(get_db)) -> GetShowt
 async def get_showtime_by_id_use_case(db: AsyncSession = Depends(get_db)) -> GetShowtimeByIdUseCase:
     showtime_repo = SQLAlchemyShowtimeRepository(db)
     return GetShowtimeByIdUseCase(showtime_repo)
-
-async def get_incoming_showtime_by_cinema_use_case(db: AsyncSession = Depends(get_db)) -> GetIncomingShowtimesByCinemaUseCase:
-    showtime_repo = SQLAlchemyShowtimeRepository(db)
-    cinema_repo = SQLAlchemyCinemaRepository(db)
-    return GetIncomingShowtimesByCinemaUseCase(showtime_repo, cinema_repo)
-
-async def get_incoming_showtime_by_movie_use_case(db: AsyncSession = Depends(get_db)) -> SQLAlchemyMovieRepository:
-    showtime_repo = SQLAlchemyShowtimeRepository(db)
-    cinema_repo = SQLAlchemyCinemaRepository(db)
-    return SQLAlchemyMovieRepository(showtime_repo, cinema_repo)
