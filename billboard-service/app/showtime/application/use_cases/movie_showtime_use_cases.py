@@ -1,7 +1,7 @@
 from typing import List, Dict
-from ..repositories.show_time_repository import ShowTimeRepository
+from ..repositories.showtime_repository import ShowTimeRepository
 from ..dtos.movie_showtime import MovieShowtimeDTO as MovieShowtime, ShowtimeDTO
-from ...core.entities.show_time import Showtime
+from ...core.entities.showtime import Showtime
 from movies.application.repositories.interfaces import MovieRepository
 from movies.core.entities.movie import Movie
 

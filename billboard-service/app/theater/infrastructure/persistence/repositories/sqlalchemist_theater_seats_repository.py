@@ -26,6 +26,14 @@ class SqlAlchemistTheaterSeatRepository(TheaterSeatRepository):
         models = result.scalars().all()        
         return [TheaterSeatModelMapper.to_domain(model) for model in models]
 
+    async def exists_by_theater(self, theater_id: int) -> bool:
+        result = await self.session.execute(
+            select(TheaterSeatModel.id)
+            .where(TheaterSeatModel.theater_id == theater_id)
+            .limit(1)
+        )
+        return bool(result.scalar())     
+         
     async def save(self, seat: Seat) -> Seat:
         model = TheaterSeatModelMapper.from_domain(seat)
         try:

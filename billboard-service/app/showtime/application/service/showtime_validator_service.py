@@ -1,11 +1,25 @@
-from ...core.entities.show_time import Showtime
+from ...core.entities.showtime import Showtime
 from app.shared.exceptions import ValidationException
-from ..repositories.show_time_repository import ShowTimeRepository
+from app.theater.application.repositories.theater_seat_repository import TheaterSeatRepository
+from ..repositories.showtime_repository import ShowTimeRepository
 
 #TODO: Validation To Specfic Exception
 class ShowtimeValidationService:
-    def __init__(self, showtime_repo: ShowTimeRepository):
+    def __init__(self, showtime_repo: ShowTimeRepository, theater_seat_repo:TheaterSeatRepository):
         self.showtime_repo = showtime_repo
+        self.theater_seat_repo = theater_seat_repo
+
+    async def validate_insert(self,  proposed_showtime: Showtime, has_post_credits: bool):
+        # Exclude in update
+        # Add Status Validation
+        await self.validation_service.validate_no_overlap(proposed_showtime, has_post_credits)
+        await self.validation_service.validate_theater_seats(proposed_showtime.theater_id)
+
+
+    async def validate_theater_seats(self, theater_id):
+        theater_count = self.theater_seat_repo.count_by_theater(theater_id)
+        if theater_count == 0:
+            raise ValidationException("Theater don't have seats can't create showtime")
 
     async def validate_no_overlap(self, proposed_showtime: Showtime, include_post_credits_scene: bool = False):
         """

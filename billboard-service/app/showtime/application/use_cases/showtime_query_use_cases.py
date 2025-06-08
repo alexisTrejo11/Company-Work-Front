@@ -1,6 +1,6 @@
 from typing import Optional, List, Dict
-from ...core.entities.show_time import Showtime
-from ..repositories.show_time_repository import ShowTimeRepository
+from ...core.entities.showtime import Showtime
+from ..repositories.showtime_repository import ShowTimeRepository
 from app.movies.application.repositories.interfaces import MovieRepository
 from app.cinema.application.repository.cinema_repository import CinemaRepository
 from app.shared.exceptions import NotFoundException
@@ -11,8 +11,12 @@ class GetShowtimeByIdUseCase:
         self.repository = repository
 
     async def execute(self, showtime_id: int) -> Optional[Showtime]:
-        return await self.repository.get_by_id(showtime_id)
+        showtime = await self.repository.get_by_id(showtime_id)
+        if not showtime:
+            raise NotFoundException("Showtime", showtime_id)
 
+        return showtime
+    
 
 class GetShowtimesUseCase:
     def __init__(self, repository: ShowTimeRepository):

@@ -2,12 +2,13 @@ from __future__ import annotations
 from sqlalchemy import String, Integer, Boolean, DateTime, Date, Text, Float, ARRAY, Enum as SQLEnum
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 from datetime import datetime, date, timezone
-import enum # Keep for Python enums
+import enum
 from app.shared.base_model import Base
 from typing import List, TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
     from app.theater.infrastructure.persistence.models.theater_model import TheaterModel
+    from app.showtime.infrastructure.persistence.models.showtime_model import ShowtimeModel
 
 class CinemaStatusEnum(enum.Enum):
     OPEN = "OPEN"
@@ -76,6 +77,10 @@ class CinemaModel(Base):
     theaters: Mapped[List["TheaterModel"]] = relationship(
         back_populates="cinema",
         cascade="all, delete-orphan"
+    )
+
+    showtimes: Mapped[List["ShowtimeModel"]] = relationship(
+        back_populates="cinema",
     )
 
     def __repr__(self):

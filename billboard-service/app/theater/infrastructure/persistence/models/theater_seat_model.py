@@ -8,7 +8,8 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .theater_model import TheaterModel
-
+    from app.showtime.infrastructure.persistence.models.showtime_seat_model import ShowtimeSeatModel
+    
 class TheaterSeatModel(Base):
     """
     SQLAlchemy ORM model for the 'theater_seats' table.
@@ -26,7 +27,7 @@ class TheaterSeatModel(Base):
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
 
     theater = relationship('TheaterModel', back_populates="theater_seats")
-    #showtime_bookings = relationship("ShowtimeSeatModel", back_populates="theater_seat")
+    showtime_bookings = relationship("ShowtimeSeatModel", back_populates="theater_seat")
 
     __table_args__ = (
          UniqueConstraint('theater_id', 'seat_row', 'seat_number', name='uq_theater_seat_position'),

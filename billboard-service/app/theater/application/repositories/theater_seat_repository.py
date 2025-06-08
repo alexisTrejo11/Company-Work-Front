@@ -39,6 +39,13 @@ class TheaterSeatRepository(ABC):
         pass
 
     @abstractmethod
+    async def exists_by_theater(self, theater_id: int) -> bool:
+        """
+        Checks if any theater seats exist for a given theater ID.
+        """
+        pass
+
+    @abstractmethod
     async def save(self, seat: TheaterSeatEntity) -> TheaterSeatEntity:
         """
         Saves a TheaterSeatEntity to the persistence layer.
