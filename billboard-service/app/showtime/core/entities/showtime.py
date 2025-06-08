@@ -1,20 +1,10 @@
-from pydantic import Field, BaseModel
+from pydantic import Field
 from typing import Dict, List, Optional, ClassVar
 from datetime import datetime, timedelta, timezone
 from decimal import Decimal
-from .value_objects import ShowtimeLanguage, ShowtimeType, Seats
+from .value_objects import Seats
+from .showtime_base import ShowtimeBase
 from ..exceptions.domain_exceptions import *
-
-class ShowtimeBase(BaseModel):
-    """Base schema for common Showtime attributes."""
-    movie_id: int
-    cinema_id: int
-    theater_id: int
-    price: Decimal = Field(..., max_digits=6, decimal_places=2)
-    start_time: datetime
-    end_time: Optional[datetime] = None 
-    type: ShowtimeType
-    language: ShowtimeLanguage
 
 class Showtime(ShowtimeBase): 
     """Full domain entity for a Showtime, including DB-generated fields and derived properties."""

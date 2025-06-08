@@ -54,7 +54,7 @@ async def create_showtime(
 @router.put("/{showtime_id}", response_model=Showtime)
 async def update_showtime(
     showtime_id: int,
-    update_data: dict,
+    update_data: ShowtimeUpdate,
     use_case: UpdateShowtimeUseCase = Depends(update_showtime_use_case)
 ):
     return await use_case.execute(showtime_id, update_data)

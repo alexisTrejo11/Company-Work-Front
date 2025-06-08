@@ -20,18 +20,12 @@ class ScheduleShowtimeUseCase:
     
     async def execute(self, showtime_data: ShowtimeCreate, has_post_credits: bool = False) -> Showtime:
         proposed_showtime = ShowtimeMappers.from_create_dto(showtime_data)
-        
-        await self._validate_creation(proposed_showtime, has_post_credits)
+        await self.validation_service.validate_insert(proposed_showtime, has_post_credits)
         
         showtime_created = await self.showtime_repo.save(proposed_showtime)
-        self.seat_service.create_showtimes_seats(showtime_created)
+        await self.seat_service.create_showtimes_seats(showtime_created)
 
         return showtime_created
-
-    async def _validate_creation(self, proposed_showtime: Showtime, has_post_credits: bool):
-        proposed_showtime.validate_business_logic()
-        await self.validation_service.validate_no_overlap(proposed_showtime, has_post_credits)
-        await self.validation_service.validate_theater_seats(proposed_showtime.theater_id)
 
 
 class UpdateShowtimeUseCase:
@@ -42,16 +36,18 @@ class UpdateShowtimeUseCase:
     async def execute(self, showtime_id: int, update_data: ShowtimeUpdate, has_post_credits: bool = False) -> Showtime:
         existing_showtime = await self.get_showtime(showtime_id)
 
-        showtime_upddated = ShowtimeMappers.update_with_dto(update_data, existing_showtime)
-        self.validation_service.validate_insert(showtime_upddated, has_post_credits)
+        showtime_updated = ShowtimeMappers.update_with_dto(update_data, existing_showtime)
+        self.validation_service.validate_insert(showtime_updated, has_post_credits)
+        # await self.seat_service.create_showtimes_seats(showtime_updated)
 
-        return await self.repository.save(showtime_upddated)
+        return await self.showtime_repo.save(showtime_updated)
 
     async def get_showtime(self, showtime_id: int) -> Showtime:
         showtime = await self.showtime_repo.get_by_id(showtime_id)
         if not showtime:
             raise NotFoundException("Showtime", showtime_id)
         
+        return showtime
 
 #TODO: Validate Delete
 class DeleteShowtimeUseCase:

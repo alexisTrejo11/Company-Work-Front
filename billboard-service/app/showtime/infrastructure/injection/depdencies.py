@@ -29,7 +29,9 @@ async def schedule_showtime_use_case(db: AsyncSession = Depends(get_db)) -> Sche
 
 async def update_showtime_use_case(db: AsyncSession = Depends(get_db)) -> UpdateShowtimeUseCase:
     showtime_repo = SQLAlchemyShowtimeRepository(db)
-    validation_service = ShowtimeValidationService(showtime_repo)
+    theater_seat_repository = SqlAlchemistTheaterSeatRepository(db)
+
+    validation_service = ShowtimeValidationService(showtime_repo, theater_seat_repository)
     return UpdateShowtimeUseCase(showtime_repo, validation_service)
 
 async def delete_showtime_use_case(db: AsyncSession = Depends(get_db)) -> DeleteShowtimeUseCase:

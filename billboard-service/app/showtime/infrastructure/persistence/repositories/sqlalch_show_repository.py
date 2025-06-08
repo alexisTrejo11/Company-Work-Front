@@ -87,11 +87,10 @@ class SQLAlchemyShowtimeRepository(ShowTimeRepository):
 
         query = select(ShowtimeModel).where(
             ShowtimeModel.theater_id == theater_id,
-            # Showtime starts within the check range / Add Endtime restriction ??
-            ShowtimeModel.start_time >= normalized_start_time,
-            ShowtimeModel.start_time <= normalized_end_time,
-        
+            ShowtimeModel.start_time < normalized_end_time,
+            ShowtimeModel.end_time > normalized_start_time
         )
+        
         if exclude_showtime_id is not None:
             query = query.where(ShowtimeModel.id != exclude_showtime_id)
 
@@ -102,14 +101,17 @@ class SQLAlchemyShowtimeRepository(ShowTimeRepository):
 
     async def save(self, showtime: Showtime) -> Showtime:
         model = ShowtimeModelMapper.from_domain(showtime)
-        
+
         if showtime.id is None:
             self.session.add(model)
         else:
-            await self.session.merge(model)
+            model = await self.session.merge(model)
             
         await self.session.commit()
-        await self.session.refresh(model)
+        
+        if showtime.id is None:
+            await self.session.refresh(model)
+
         return ShowtimeModelMapper.to_domain(model)
 
     async def delete(self, showtime_id: int) -> None:

@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 from datetime import datetime
 from decimal import Decimal
 from typing import Optional
@@ -20,3 +20,17 @@ class ShowtimeUpdate(BaseModel):
     end_time: Optional[datetime] = None
     type: Optional[ShowtimeType] = None
     language: Optional[ShowtimeLanguage] = None
+
+    @field_validator('start_time')
+    @classmethod
+    def validate_start_time_timezone(cls, v):
+        if v.tzinfo is None:
+            raise ValueError('start_time must include time zone information')
+        return v
+    
+    @field_validator('end_time')
+    @classmethod
+    def validate_end_time_timezone(cls, v):
+        if v is not None and v.tzinfo is None:
+            raise ValueError('end_time must include time zone information')
+        return v

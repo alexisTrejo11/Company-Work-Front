@@ -9,15 +9,12 @@ class ShowtimeValidationService:
         self.showtime_repo = showtime_repo
         self.theater_seat_repo = theater_seat_repo
 
-    async def validate_insert(self,  proposed_showtime: Showtime, has_post_credits: bool):
-        # Exclude in update
-        # Add Status Validation
-        await self.validation_service.validate_no_overlap(proposed_showtime, has_post_credits)
-        await self.validation_service.validate_theater_seats(proposed_showtime.theater_id)
-
+    async def validate_insert(self, proposed_showtime: Showtime, has_post_credits: bool):
+        await self.validate_no_overlap(proposed_showtime, has_post_credits)
+        await self.validate_theater_seats(proposed_showtime.theater_id)
 
     async def validate_theater_seats(self, theater_id):
-        theater_count = self.theater_seat_repo.count_by_theater(theater_id)
+        theater_count = await self.theater_seat_repo.exists_by_theater(theater_id)
         if theater_count == 0:
             raise ValidationException("Theater don't have seats can't create showtime")
 
@@ -42,24 +39,27 @@ class ShowtimeValidationService:
         buffered_end_time = proposed_showtime.end_time + post_buffer
         
         if not proposed_showtime.id:
-            overlapping_showtime = await self.showtime_repo.get_by_theater_and_date_range(
+            overlapping_showtimes = await self.showtime_repo.get_by_theater_and_date_range(
                 theater_id=proposed_showtime.theater_id,
                 start_time_to_check=buffered_start_time,
                 end_time_to_check=buffered_end_time
             )
         else:
-            overlapping_showtime = await self.showtime_repo.get_by_theater_and_date_range(
+            overlapping_showtimes = await self.showtime_repo.get_by_theater_and_date_range(
                 theater_id=proposed_showtime.theater_id,
                 start_time_to_check=buffered_start_time,
                 end_time_to_check=buffered_end_time,
                 exclude_showtime_id=proposed_showtime.id
             )
 
-        if overlapping_showtime:
+        if overlapping_showtimes:
+            first_overlap = overlapping_showtimes[0]
             raise ValidationException(
-                f"Can't schedule Showtime (ID: {proposed_showtime.id}). "
-                f"It overlaps with existing Showtime {overlapping_showtime.id} "
-                f"in Theater {proposed_showtime.theater_id}. "
-                f"Proposed buffered range: {buffered_start_time.strftime('%H:%M')} - {buffered_end_time.strftime('%H:%M')}"
+                field="Starttime",
+                reason=f"Can't schedule Showtime (ID: {proposed_showtime.id}). " +
+                f"It overlaps with existing Showtime {first_overlap.id} " +
+                f"in Theater {proposed_showtime.theater_id}. " +
+                f"Proposed buffered range: {buffered_start_time.strftime('%H:%M')} - {buffered_end_time.strftime('%H:%M')}. " +
+                f"Found {len(overlapping_showtimes)} overlapping showtime(s)." 
             )
     
