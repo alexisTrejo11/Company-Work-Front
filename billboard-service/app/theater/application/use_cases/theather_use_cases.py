@@ -1,7 +1,7 @@
 from typing import Optional, Dict, List
 from ...core.entities.theater import Theater
 from ..repositories.theater_repository import TheaterRepository
-from app.cinema.application.repository.cinema_repository import CinemaRepository
+from app.cinema.application.repository import CinemaRepository
 from app.shared.exceptions import NotFoundException
 
 class GetTheaterByIdUseCase:

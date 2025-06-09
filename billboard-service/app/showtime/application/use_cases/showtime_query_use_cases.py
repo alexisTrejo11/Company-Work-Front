@@ -1,9 +1,7 @@
 from typing import Optional, List, Dict
-from ...core.entities.showtime import Showtime
-from ..repositories.showtime_repository import ShowTimeRepository
-from app.movies.application.repositories.interfaces import MovieRepository
-from app.cinema.application.repository.cinema_repository import CinemaRepository
+from app.showtime.core.entities.showtime import Showtime
 from app.shared.exceptions import NotFoundException
+from ..repositories.showtime_repository import ShowTimeRepository
 
 class GetShowtimeByIdUseCase:
     def __init__(self, repository: ShowTimeRepository):

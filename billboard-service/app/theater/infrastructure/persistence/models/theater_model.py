@@ -9,7 +9,7 @@ from sqlalchemy import Enum as SqlEnum
 from app.shared.base_model import Base 
     
 if TYPE_CHECKING:
-    from app.cinema.infrastructure.persistence.model.cinema_model import CinemaModel
+    from app.cinema.infrastructure.persistence.cinema_model import CinemaModel
     from app.showtime.infrastructure.persistence.models.showtime_model import ShowtimeModel
     from .theater_seat_model import TheaterSeatModel
 

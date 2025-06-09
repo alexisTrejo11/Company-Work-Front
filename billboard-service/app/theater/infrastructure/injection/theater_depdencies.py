@@ -1,18 +1,9 @@
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.config.postgres_config import get_db
-from ...infrastructure.persistence.repositories.sqlalchemist_theater_repository import (
-    SQLAlchemyTheaterRepository
-)
-from app.cinema.infrastructure.persistence.repository.sql_alchemist_cinema_repository import SQLAlchemyCinemaRepository
-from ...application.use_cases.theather_use_cases import (
-    GetTheaterByIdUseCase,
-    GetTheatersByCinemaUseCase,
-    ListTheatersUseCase,
-    CreateTheaterUseCase,
-    UpdateTheaterUseCase,
-    DeleteTheaterUseCase
-)
+from config.postgres_config import get_db
+from ..persistence.repositories.sqlalchemist_theater_repository import SQLAlchemyTheaterRepository
+from app.cinema.infrastructure.persistence.sql_alch_repository import SQLAlchemyCinemaRepository
+from ...application.use_cases.theather_use_cases import GetTheaterByIdUseCase, GetTheatersByCinemaUseCase, ListTheatersUseCase, CreateTheaterUseCase, UpdateTheaterUseCase, DeleteTheaterUseCase
 
 async def get_theater_by_id_use_case(db: AsyncSession = Depends(get_db)) -> GetTheaterByIdUseCase:
     repo = SQLAlchemyTheaterRepository(db)

@@ -1,6 +1,6 @@
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.config.postgres_config import get_db
+from config.postgres_config import get_db
 from ..persistence.repositories.sqlalchemist_theater_seats_repository import SqlAlchemistTheaterSeatRepository
 from ..persistence.repositories.sqlalchemist_theater_repository import  SQLAlchemyTheaterRepository
 from ...application.use_cases.seats_use_cases import GetTheaterSeatByIdUseCase, GetSeatsByTheaterUseCase, CreateTheaterSeatUseCase, UpdateTheaterSeatUseCase, DeleteTheaterSeatUseCase

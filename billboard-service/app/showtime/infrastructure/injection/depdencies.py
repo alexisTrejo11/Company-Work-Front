@@ -1,7 +1,7 @@
 # Infrastrucutre
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.config.postgres_config import get_db
+from config.postgres_config import get_db
 
 # Module
 from ...application.use_cases.showtime_command_use_cases import ScheduleShowtimeUseCase, UpdateShowtimeUseCase, DeleteShowtimeUseCase
@@ -12,7 +12,7 @@ from ...application.service.showtime_seat_service import ShowTimeSeatService
 from ..persistence.repositories.sqlalch_show_seat_repository import SqlAlchShowtimeSeatRepository
 
 # External Modules
-from app.cinema.infrastructure.persistence.repository.sql_alchemist_cinema_repository import SQLAlchemyCinemaRepository
+from app.cinema.infrastructure.persistence.sql_alch_repository import SQLAlchemyCinemaRepository
 from app.movies.infrastructure.persistence.repositories.sql_alchemist_movie_repository import SQLAlchemyMovieRepository
 from app.theater.infrastructure.persistence.repositories.sqlalchemist_theater_seats_repository import SqlAlchemistTheaterSeatRepository
 

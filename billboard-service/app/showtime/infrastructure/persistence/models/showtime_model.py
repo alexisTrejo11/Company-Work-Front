@@ -12,7 +12,7 @@ from ....core.entities.value_objects import ShowtimeLanguage, ShowtimeType
 if TYPE_CHECKING:
     from app.movies.infrastructure.persistence.models.models import MovieModel
     from app.theater.infrastructure.persistence.models.theater_model import TheaterModel
-    from app.cinema.infrastructure.persistence.model.cinema_model import CinemaModel
+    from app.cinema.infrastructure.persistence.cinema_model import CinemaModel
     from ..models.showtime_seat_model import ShowtimeSeatModel
     
 class  ShowtimeModel(Base):
