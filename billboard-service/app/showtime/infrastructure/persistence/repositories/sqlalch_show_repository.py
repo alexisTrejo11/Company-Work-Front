@@ -2,11 +2,10 @@ from typing import Dict, List, Optional
 from datetime import datetime, timezone, timedelta
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, delete
+from app.showtime.application.repositories.showtime_repository import ShowTimeRepository
+from app.showtime.domain.entities.showtime import Showtime
+from ..mappers.showtime_mappers import ShowtimeModelMapper
 from ..models.showtime_model import ShowtimeModel
-from ...mappers.showtime_mappers import ShowtimeModelMapper
-from ....core.entities.showtime import Showtime
-from ....application.repositories.showtime_repository import ShowTimeRepository
-
 
 class SQLAlchemyShowtimeRepository(ShowTimeRepository):
     def __init__(self, session: AsyncSession):

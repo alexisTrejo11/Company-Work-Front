@@ -1,6 +1,6 @@
-from abc import ABC, abstractmethod
-from ...core.entities.showtime_seat import ShowtimeSeatEntity as ShowtimeSeat
 from typing import Optional, List
+from abc import ABC, abstractmethod
+from app.showtime.domain.entities.showtime_seat import ShowtimeSeat
 
 class ShowtimeSeatRepository:
     @abstractmethod

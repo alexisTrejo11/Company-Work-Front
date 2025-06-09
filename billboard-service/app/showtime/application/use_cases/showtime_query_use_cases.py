@@ -1,5 +1,5 @@
 from typing import Optional, List, Dict
-from app.showtime.core.entities.showtime import Showtime
+from app.showtime.domain.entities.showtime import Showtime
 from app.shared.exceptions import NotFoundException
 from ..repositories.showtime_repository import ShowTimeRepository
 

@@ -1,8 +1,8 @@
-from ...core.entities.showtime import Showtime
-from app.theater.application.repositories.theater_seat_repository import TheaterSeatRepository
-from ..repositories.showtime_seat_repository import ShowtimeSeatRepository
-from ...core.entities.showtime_seat import ShowtimeSeatEntity
 from datetime import timezone, datetime
+from app.theater.application.repositories.theater_seat_repository import TheaterSeatRepository
+from app.showtime.domain.entities.showtime import Showtime
+from app.showtime.domain.entities.showtime_seat import ShowtimeSeat
+from ..repositories.showtime_seat_repository import ShowtimeSeatRepository
 
 class ShowTimeSeatService:
     def __init__(self, theater_seat_repo: TheaterSeatRepository, showtime_seat_repo: ShowtimeSeatRepository):
@@ -17,7 +17,7 @@ class ShowTimeSeatService:
     def _generate_showtimes_seats(self, theater_seats, showtime):
         showtimes_seats = []
         for theater_seat in theater_seats:
-            showtime_seat = ShowtimeSeatEntity(
+            showtime_seat = ShowtimeSeat(
                 showtime_id=showtime.id,
                 theater_seat_id=theater_seat.id,
                 created_at=datetime.now(timezone.utc),

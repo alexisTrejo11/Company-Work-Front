@@ -1,11 +1,10 @@
-from datetime import timedelta
 from app.shared.exceptions import NotFoundException
-from ...application.mappers.showtime_mappers import ShowtimeMappers
-from ...application.dtos.showtime_dtos import ShowtimeCreate, ShowtimeUpdate
-from ...core.entities.showtime import Showtime
-from ..repositories.showtime_repository import ShowTimeRepository
+from app.showtime.domain.entities.showtime import Showtime
 from ..service.showtime_validator_service import ShowtimeValidationService as ValidationService
 from ..service.showtime_seat_service import ShowTimeSeatService
+from ..repositories.showtime_repository import ShowTimeRepository
+from ...application.mappers.showtime_mappers import ShowtimeMappers
+from ...application.dtos.showtime_insert import ShowtimeCreate, ShowtimeUpdate
 
 class ScheduleShowtimeUseCase:
     def __init__(

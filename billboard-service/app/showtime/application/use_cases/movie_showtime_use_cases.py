@@ -1,9 +1,9 @@
 from typing import List, Dict
 from ..repositories.showtime_repository import ShowTimeRepository
 from ..dtos.movie_showtime import MovieShowtimeDTO as MovieShowtime, ShowtimeDTO
-from ...core.entities.showtime import Showtime
-from movies.application.repositories.interfaces import MovieRepository
-from movies.core.entities.movie import Movie
+from app.showtime.domain.entities.showtime import Showtime
+from app.movies.application.repositories import MovieRepository
+from app.movies.domain.entities import Movie
 
 # TODO: Add Repository funcs and Add Cinema Region / Check ASYNC 
 class GetIncomingMovieShowtimesUseCase:

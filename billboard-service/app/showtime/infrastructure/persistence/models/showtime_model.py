@@ -1,16 +1,15 @@
 from __future__ import annotations
+from datetime import datetime
+from decimal import Decimal
+from typing import Optional, TYPE_CHECKING
 from sqlalchemy import Numeric, Integer, DateTime, ForeignKey, Enum
 from sqlalchemy.orm import mapped_column, relationship, Mapped
 from sqlalchemy.sql import func
-from datetime import datetime
-from typing import Optional, TYPE_CHECKING
-from sqlalchemy.sql import func
-from decimal import Decimal
 from app.shared.base_model import Base
-from ....core.entities.value_objects import ShowtimeLanguage, ShowtimeType
+from app.showtime.domain.enums import ShowtimeLanguage, ShowtimeType
 
 if TYPE_CHECKING:
-    from app.movies.infrastructure.persistence.models.models import MovieModel
+    from app.movies.infrastructure.persistence.models import MovieModel
     from app.theater.infrastructure.persistence.models.theater_model import TheaterModel
     from app.cinema.infrastructure.persistence.cinema_model import CinemaModel
     from ..models.showtime_seat_model import ShowtimeSeatModel

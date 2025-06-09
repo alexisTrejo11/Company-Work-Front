@@ -1,10 +1,10 @@
 from typing import List, Optional
-from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+from app.showtime.application.repositories.showtime_seat_repository import ShowtimeSeatRepository
+from app.showtime.domain.entities.showtime_seat import ShowtimeSeat
+from ..mappers.showtime_seat_mappers import ShowtimeSeatModelMapper
 from ..models.showtime_seat_model import ShowtimeSeatModel
-from ....application.repositories.showtime_seat_repository import ShowtimeSeatRepository
-from ....core.entities.showtime_seat import ShowtimeSeatEntity as ShowtimeSeat
-from ...mappers.showtime_seat_mappers import ShowTimeSeatModelMapper as ShowtimeSeatModelMapper
 
 class SqlAlchShowtimeSeatRepository(ShowtimeSeatRepository):
     def __init__(self, session: AsyncSession):

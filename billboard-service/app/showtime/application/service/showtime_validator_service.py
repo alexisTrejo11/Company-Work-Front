@@ -1,6 +1,6 @@
-from ...core.entities.showtime import Showtime
 from app.shared.exceptions import ValidationException
 from app.theater.application.repositories.theater_seat_repository import TheaterSeatRepository
+from app.showtime.domain.entities.showtime import Showtime
 from ..repositories.showtime_repository import ShowTimeRepository
 
 #TODO: Validation To Specfic Exception

@@ -1,8 +1,8 @@
 from typing import List, Dict
+from datetime import datetime
 from abc import ABC, abstractmethod
 from app.shared.repository.common_repository import CommonRepository
-from ...core.entities.showtime import Showtime
-from datetime import datetime
+from app.showtime.domain.entities.showtime import Showtime
 
 class ShowTimeRepository(CommonRepository[Showtime]):
     @abstractmethod

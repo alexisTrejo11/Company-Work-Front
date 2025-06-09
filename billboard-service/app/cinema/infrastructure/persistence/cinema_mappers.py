@@ -1,7 +1,6 @@
 from datetime import datetime, timezone
-from typing import List, Dict, Any
 from app.cinema.domain.entities import Cinema
-from app.cinema.domain.enums import CinemaFeatures, CinemaStatus, CinemaType, LocationRegion
+from app.cinema.domain.enums import CinemaFeatures
 from app.cinema.domain.value_objects import CinemaAmenities, ContactInfo, SocialMedia, Location
 from app.cinema.infrastructure.persistence.cinema_model import CinemaModel
 

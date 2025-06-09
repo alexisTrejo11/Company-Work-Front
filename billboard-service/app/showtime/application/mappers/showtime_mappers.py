@@ -1,5 +1,5 @@
-from ..dtos.showtime_dtos import ShowtimeCreate, ShowtimeUpdate
-from ...core.entities.showtime import Showtime as ShowtimeEntity
+from ..dtos.showtime_insert import ShowtimeCreate, ShowtimeUpdate
+from ...domain.entities.showtime import Showtime as ShowtimeEntity
 from datetime import datetime, timezone
 
 class ShowtimeMappers:
