@@ -1,10 +1,10 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends, status
 from app.movies.domain.entities import Movie
-from app.movies.application.use_cases import GetMovieByIdUseCase, GetMoviesInExhitionUseCase, CreateMovieUseCase, DeleteMovieUseCase
-from .dependencies import get_movie_by_id_use_case, get_active_movies_use_case, create_movie_use_case, delete_movie_use_case
+from app.movies.application.use_cases import GetMovieByIdUseCase, GetMoviesInExhitionUseCase, UpdateMovieUseCase, CreateMovieUseCase, DeleteMovieUseCase
+from .dependencies import get_movie_by_id_use_case, get_active_movies_use_case, create_movie_use_case, update_movie_use_case, delete_movie_use_case
 
-router = APIRouter(prefix="/v1/api/movies")
+router = APIRouter(prefix="/api/v1/movies")
 
 @router.get("/{movie_id}", response_model=Movie)
 async def get_movie_by_id(
@@ -33,12 +33,13 @@ async def create_movies(
 
 
 @router.put("/{movie_id}", response_model=Movie, status_code=status.HTTP_200_OK)
-async def create_movies(
+async def update_movie(
+    movie_id: int,
     movie: Movie,
-    use_case: Annotated[CreateMovieUseCase, Depends(create_movie_use_case)]
+    use_case: Annotated[UpdateMovieUseCase, Depends(update_movie_use_case)]
 ):
 
-    created_movie = await use_case.execute(movie)
+    created_movie = await use_case.execute(movie_id, movie)
     return created_movie
 
 

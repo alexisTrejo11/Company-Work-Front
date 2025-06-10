@@ -8,16 +8,16 @@ class TheaterType(str, Enum):
     VIP = 'VIP'
 
 class MovieGenre(str, Enum):
-    ACTION = 'action'
-    COMEDY = 'comedy'
-    DRAMA = 'drama'
-    ROMANCE = 'romance'
-    THRILLER = 'thriller'
-    SCI_FI = 'sci-fi'
+    ACTION = 'ACTION'
+    COMEDY = 'COMEDY'
+    DRAMA = 'DRAMA'
+    ROMANCE = 'ROMANCE'
+    THRILLER = 'THRILLER'
+    SCI_FI = 'SCI_FI'
 
 class MovieRating(str, Enum):
     G = 'G'
     PG = 'PG'
-    PG_13 = 'PG-13'
+    PG_13 = 'PG_13'
     R = 'R'
-    NC_17 = 'NC-17'
+    NC_17 = 'NC_17'

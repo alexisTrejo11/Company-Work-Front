@@ -37,38 +37,19 @@ class SQLAlchemyMovieRepository(MovieRepository):
         return [MovieMapper.to_entity(model) for model in models]
 
     async def save(self, entity: Movie) -> Movie:
-        if entity.id:
-          model = await self._update(entity)
+        model = MovieMapper.to_model(entity)
+        
+        if entity.id is None:
+            self.session.add(model)
         else:
-            model = await self._create(entity)
+            model = await self.session.merge(model)
+            
+        await self.session.commit()
+        
+        if entity.id is None:
+            await self.session.refresh(model)
         return MovieMapper.to_entity(model)
 
-    async def _create(self, entity: Movie) -> MovieModel:
-        model = MovieMapper.to_model(entity)
-        self.session.add(model)
-        await self.session.commit()
-        await self.session.refresh(model)
-        return model
-    
-    async def _update(self, entity: Movie):
-        model = await self.session.get(MovieModel, entity.id)
-        if not model:
-            raise ValueError("Movie not found")
-        
-        model.title = entity.title
-        model.original_title = entity.original_title
-        model.duration = entity.duration
-        model.release_date = entity.release_date
-        model.end_date = entity.end_date
-        model.description = entity.description
-        model.genre = entity.genre
-        model.rating = entity.rating
-        model.poster_url = entity.poster_url
-        model.trailer_url = entity.trailer_url
-        model.is_active = entity.is_active
-
-        await self.session.commit()
-        await self.session.refresh(model)
     
     async def delete(self, entity) -> None:
         stmt = delete(MovieModel).where(MovieModel.id == entity.id)

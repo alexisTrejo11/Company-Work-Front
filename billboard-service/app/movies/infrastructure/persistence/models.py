@@ -1,10 +1,12 @@
 from __future__ import annotations
-from sqlalchemy import String, Integer, Boolean, Date, DateTime
+from sqlalchemy import String, Integer, Boolean, Date, DateTime, Enum as SQLEnum
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.sql import func
 from app.shared.base_model import Base
+from app.movies.domain.enums import MovieRating, MovieGenre
 from sqlalchemy.orm import mapped_column, relationship, Mapped
 from typing import List, TYPE_CHECKING
+
 
 if TYPE_CHECKING:
     from app.showtime.infrastructure.persistence.models.showtime_model import ShowtimeModel
@@ -19,8 +21,8 @@ class MovieModel(Base):
     release_date = mapped_column(Date, nullable=False)
     end_date = mapped_column(Date, nullable=False)
     description = mapped_column(String, nullable=False)
-    genre = mapped_column(String, nullable=False)
-    rating = mapped_column(String, nullable=False)
+    genre = mapped_column(SQLEnum(MovieGenre, name="movie_genre"), nullable=False)
+    rating = mapped_column(SQLEnum(MovieRating, name="movie_rating"), nullable=False)
     poster_url = mapped_column(String)
     trailer_url = mapped_column(String)
     is_active = mapped_column(Boolean, default=True)

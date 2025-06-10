@@ -90,7 +90,6 @@ class SQLAlchemyCinemaRepository(CinemaRepository):
             if 'email_contact' in filter_params:
                 filters.append(CinemaModel.email_contact.ilike(f"%{filter_params['email_contact']}%"))
             
-
             if filters:
                 stmt = stmt.where(and_(*filters))
         

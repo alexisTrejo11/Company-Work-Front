@@ -20,7 +20,3 @@ class CinemaSearchFilters(BaseModel):
     longitude: Optional[float] = None
     phone: Optional[str] = None
     email_contact: Optional[str] = None
-
-class PaginationParams(BaseModel):
-    offset: int = 0
-    limit: int = 10

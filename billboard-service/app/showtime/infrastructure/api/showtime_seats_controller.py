@@ -1,6 +1,6 @@
 from fastapi import APIRouter
-from ....core.entities.showtime_seat import ShowtimeSeatEntity as ShowtimeSeat
-from ....application.use_cases.showtime_seats_use_case import GetShowtimeSeatsUseCase
+from ...domain.entities.showtime_seat import ShowtimeSeatEntity as ShowtimeSeat
+from ...application.use_cases.showtime_seats_use_case import GetShowtimeSeatsUseCase
 
 router = APIRouter(prefix="/api/v1/showtimes")
 
